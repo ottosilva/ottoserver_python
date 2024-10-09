@@ -1,0 +1,5 @@
+**/*resolved.py
+*resolved.py
+.env
+.pytest_cache
+__pycache__
