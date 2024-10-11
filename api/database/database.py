@@ -1,4 +1,4 @@
-__all__ = ["db","collection"]
+__all__ = ["db","COLLECTIONS"]
 
 import logging
 import os
@@ -9,6 +9,8 @@ from pymongo.server_api import ServerApi
 load_dotenv()
 
 MONGODB_URL=os.getenv("MONGODB_URL")
+DB_NAME = "ottodatabase_python"
+COLLECTIONS = ["products", "users", "orders"]
 logger = logging.getLogger("uvicorn")
 logging.getLogger("passlib").setLevel(logging.ERROR)
 client = MongoClient(MONGODB_URL, server_api=ServerApi("1"))
@@ -20,5 +22,4 @@ except Exception as e:
     print(e)
 
 
-db = client["ottodatabase_python"]
-collection = db["products"]
+db = client[DB_NAME]

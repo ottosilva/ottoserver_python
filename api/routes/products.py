@@ -1,45 +1,46 @@
+__all__ = ["products_router"]
+
+
 from fastapi import APIRouter, HTTPException
-from typing import List
-from api.database.database import collection
 from api.models.products import Product
+from fastapi.responses import JSONResponse
+from fastapi import status
 from pydantic_mongo import PydanticObjectId
+from ..services.products import ProductsServiceDependency
 from ..__common_deps import QueryParamsDependency, QueryParams
+from ..models.products import UpdationProduct
 
-router = APIRouter()
+products_router = APIRouter(prefix="/products", tags=["Products"])
 
-@router.post("/products", response_model=Product)
-async def create_product(product: Product):
-    product_dict = product.model_dump()
-    collection.insert_one(product_dict)
-    return product
+@products_router.get("/")
+async def list_products(
+    products: ProductsServiceDependency, params: QueryParamsDependency
+):
+    return products.get_all(params)
 
-@router.post("/manyproducts", response_model=List[Product])
-async def create_products(products: List[Product]):
-    product_dicts = [product.model_dump() for product in products]
-    result = collection.insert_many(product_dicts)
 
-    if result.inserted_ids:
-        return products
-    else:
-        raise HTTPException(status_code=500, detail="Error inserting books")
+@products_router.get("/{id}")
+async def get_product(id: PydanticObjectId, products: ProductsServiceDependency):
+    return products.get_one(id) or JSONResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        content={"error": f"Product with id: {id}, was not found."},
+    )
 
-@router.get("/products")
-async def get_products():
-    products = []
-    for product in collection.find():
-        products.append(Product(**product))
-    return products
 
-@router.get("/productsQuery")
-async def get_products(query_params: QueryParams = QueryParamsDependency):
-    cursor = query_params.query_collection(collection)
-    products = list(cursor)
-    return products
+@products_router.post("/", status_code=status.HTTP_201_CREATED)
+async def create_product(
+    product: Product,
+    products: ProductsServiceDependency,
+):
+    inserted_id = products.create_one(product)
+    return {"result message": f"Product created with id: {inserted_id}"}
 
-@router.get("/products/{product_id}", response_model=Product)
-async def get_product(product_id: str):
-    product = collection.find_one({"_id": PydanticObjectId(product_id)})
-    if product:
-        return Product(**product)
-    else:
-        raise HTTPException(status_code=404, detail="product not found")
+@products_router.put("/{id}")
+async def update_product(
+    id: PydanticObjectId, product: UpdationProduct, products: ProductsServiceDependency
+):
+    return products.update_one(id, product)
+
+@products_router.delete("/{id}")
+async def delete_product(id: PydanticObjectId, products: ProductsServiceDependency):
+    return products.delete_one(id)
