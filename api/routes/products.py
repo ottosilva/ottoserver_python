@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from api.config.database import collection
+from api.database.database import collection
 from api.models.products import Product
 from pydantic_mongo import PydanticObjectId
+from ..__common_deps import QueryParamsDependency, QueryParams
 
 router = APIRouter()
 
@@ -27,6 +28,12 @@ async def get_products():
     products = []
     for product in collection.find():
         products.append(Product(**product))
+    return products
+
+@router.get("/productsQuery")
+async def get_products(query_params: QueryParams = QueryParamsDependency):
+    cursor = query_params.query_collection(collection)
+    products = list(cursor)
     return products
 
 @router.get("/products/{product_id}", response_model=Product)

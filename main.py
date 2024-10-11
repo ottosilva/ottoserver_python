@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.config.database import *
+from api.database.database import *
 from api.models.products import *
 from api.routes.products import router as products_router 
 
