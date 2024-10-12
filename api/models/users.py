@@ -27,6 +27,7 @@ class Role(str, Enum):
 class BaseUser(BaseModel):
     username: str
     role: Role = Role.customer
+    name: str | None = Field(default=None)
     email: str = Field(default=None)
     image: str | None = Field(default=None)
 
@@ -34,6 +35,7 @@ class BaseUser(BaseModel):
 class UpdationUser(BaseUser):
     username: str = Field(default=None)
     role: Role = Field(default=None)
+    name: str | None = Field(default=None)
     email: str = Field(default=None)
     image: str | None = Field(default=None)
 

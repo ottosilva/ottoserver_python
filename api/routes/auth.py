@@ -1,3 +1,6 @@
+__all__ = ["auth_router"]
+
+
 from fastapi import APIRouter, Response
 
 from ..models import CreationUser, LoginUser
