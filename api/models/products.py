@@ -23,4 +23,8 @@ class UpdationProduct(BaseModel):
 
 
 class StoredProduct(Product):
+    # Otros nombres que podria recibir esta clase son:
+    # DatabaseProduct: Indica que el producto proviene de una base de datos.
+    # PersistedProduct: Representa un producto que ha sido persistido o almacenado en algún tipo de almacenamiento
+    # SavedProduct: Hace referencia a un producto que ha sido guardado en un almacenamiento permanente.
     id: PydanticObjectId = Field(alias="_id")

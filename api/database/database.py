@@ -1,11 +1,10 @@
-__all__ = ["db","COLLECTIONS"]
+__all__ = ["db","COLLECTIONS","logger"]
 
 import logging
 import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
 load_dotenv()
 
 MONGODB_URL=os.getenv("MONGODB_URL")

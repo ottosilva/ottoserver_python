@@ -1,20 +1,20 @@
 __all__ = ["products_router"]
 
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from api.models.products import Product
 from fastapi.responses import JSONResponse
 from fastapi import status
 from pydantic_mongo import PydanticObjectId
 from ..services.products import ProductsServiceDependency
-from ..__common_deps import QueryParamsDependency, QueryParams
+from ..__common_deps import QueryParamsDependency
 from ..models.products import UpdationProduct
 
 products_router = APIRouter(prefix="/products", tags=["Products"])
 
-@products_router.get("/")
-async def list_products(
-    products: ProductsServiceDependency, params: QueryParamsDependency
+@products_router.get("/") #ruta
+async def list_products( #controlador
+    products: ProductsServiceDependency, params: QueryParamsDependency #a products le estoy dando el servicio de productsService
 ):
     return products.get_all(params)
 

@@ -47,11 +47,11 @@ class LoginUser(BaseModel):
     username: str
     password: str
 
-
+#usuario que existe en base de datos y que tiene la data que yo le puedo devolver al cliente
 class PublicStoredUser(BaseUser):
     id: PydanticObjectId = Field(validation_alias=AliasChoices("_id", "id"))
 
-
+#usuario que existe en base de datos con el hash password, pero esta info se mantendra privada
 class PrivateStoredUser(BaseUser):
     id: PydanticObjectId = Field(alias="_id")
     hash_password: str
