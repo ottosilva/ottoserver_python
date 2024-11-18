@@ -12,7 +12,7 @@ DB_NAME = "ottodatabase_python"
 COLLECTIONS = ["products", "users", "orders"]
 logger = logging.getLogger("uvicorn")
 logging.getLogger("passlib").setLevel(logging.ERROR)
-client = MongoClient(MONGODB_URL, server_api=ServerApi("1"))
+client = MongoClient(MONGODB_URL,tls=True, server_api=ServerApi("1"))
 # Send a ping to confirm a successful connection
 try:
     client.admin.command("ping")
